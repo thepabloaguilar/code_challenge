@@ -1,0 +1,60 @@
+version: '3.0'
+
+networks:
+  challenge:
+    driver: bridge
+
+services:
+  flask_challenge:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "6606:6606"
+    networks:
+      - challenge
+    env_file:
+      - ./flask.env
+    depends_on:
+      - postgres_challenge
+      - mongodb_challenge
+      - elastichsearch_challenge
+  postgres_challenge:
+    build:
+      context: ./postgres_docker
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "5432:5432"
+    networks:
+      - challenge
+  mongodb_challenge:
+    image: bitnami/mongodb
+    restart: always
+    user: root
+    ports:
+      - "27018:27017"
+    environment:
+      - MONGODB_USERNAME=super_user
+      - MONGODB_PASSWORD=super_password
+      - MONGODB_DATABASE=challenge_db
+    networks:
+      - challenge
+    volumes:
+      - ./mongodb_volume:/bitnami/
+  elastichsearch_challenge:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.2
+    restart: always
+    user: root
+    volumes:
+      - ./elasticsearch_volume:/usr/share/elasticsearch/data
+    environment:
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
+    ports:
+      - "9300:9300"
+      - "9200:9200"
+    networks:
+      - challenge

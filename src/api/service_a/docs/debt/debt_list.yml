@@ -1,0 +1,63 @@
+Retornará uma lista de todas as Dividas
+----
+tags:
+  - Serviço A
+parameters:
+  - in: header
+    name: Token
+    type: string
+    required: true
+    description: Token fornecido pela rota de Login
+definitions:
+  Debts:
+    type: object
+    properties:
+      debts:
+        type: array
+        items:
+          $ref: "#/definitions/debt"
+  debt:
+    type: object
+    properties:
+      idCliente:
+        type: integer
+      idEmpresa:
+        type: integer
+      nomeEmpresa:
+        type: string
+      valor:
+        type: number
+        format: float
+      descricao:
+        type: string
+      dataPagamento:
+        type: string
+        format: date
+      dataVencimento:
+        type: string
+        format: date
+  Token_Invalido:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Token Invalido ou Expirado
+  Token_No_Header:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Token não especificado no header
+responses:
+  200:
+    description: Retorna todas as dividas
+    schema:
+      $ref: '#/definitions/Debts'
+  401:
+    description: Token Invalido ou Expirado
+    schema:
+      $ref: '#/definitions/Token_Invalido'
+  403:
+    description: Token não especificado no Header
+    schema:
+      $ref: '#/definitions/Token_No_Header'

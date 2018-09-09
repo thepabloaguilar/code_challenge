@@ -1,0 +1,86 @@
+Retornará um Cliente com suas respectivas dividas
+----
+tags:
+  - Serviço A
+parameters:
+  - in: header
+    name: Token
+    type: string
+    required: true
+    description: Token fornecido pela rota de Login
+  - in: path
+    name: tax_id
+    type: string
+    required: true
+    description: CPF do Cliente
+definitions:
+  CustomerResource:
+    type: object
+    properties:
+      id:
+        type: integer
+      cpf:
+        type: string
+      nome:
+        type: string
+      endereco:
+        type: string
+      dividas:
+        type: array
+        items:
+          $ref: "#/definitions/Divida"
+  Divida:
+    type: object
+    properties:
+      idCliente:
+        type: integer
+      idEmpresa:
+        type: integer
+      nomeEmpresa:
+        type: string
+      valor:
+        type: number
+        format: float
+      descricao:
+        type: string
+      dataPagamento:
+        type: string
+        format: date
+      dataVencimento:
+        type: string
+        format: date
+  Token_Invalido:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Token Invalido ou Expirado
+  Token_No_Header:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Token não especificado no header
+  User_Not_Found:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Cliente não encontrado
+responses:
+  200:
+    description: Cliente com suas respectivas dividas
+    schema:
+      $ref: '#/definitions/CustomerResource'
+  401:
+    description: Token Invalido ou Expirado
+    schema:
+      $ref: '#/definitions/Token_Invalido'
+  403:
+    description: Token não especificado no Header
+    schema:
+      $ref: '#/definitions/Token_No_Header'
+  404:
+    description: Cliente não encontrado
+    schema:
+      $ref: '#/definitions/User_Not_Found'

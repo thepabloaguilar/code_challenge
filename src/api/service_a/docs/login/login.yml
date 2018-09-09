@@ -1,0 +1,52 @@
+Rota para Login
+----
+tags:
+  - Serviço A
+parameters:
+  - in: body
+    name: body
+    type: string
+    required: true
+    description: Usuario e Senha
+    schema:
+      properties:
+        username:
+          type: string
+          description: Nome de Usuario
+          example: teste
+        password:
+          type: string
+          format: password
+          description: Senha do Usuario
+          example: senha123
+definitions:
+  Token:
+    type: object
+    properties:
+      token:
+        type: string
+  Wrong_Password:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Senha Incorreta
+  Wrong_User:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Usuario não encontrado
+responses:
+  200:
+    description: Token para consumir as outras rotas do Serviço A
+    schema:
+      $ref: '#/definitions/Token'
+  401:
+    description: Senha Invalida
+    schema:
+      $ref: '#/definitions/Wrong_Password'
+  404:
+    description: Usuario não encontrado
+    schema:
+      $ref: '#/definitions/Wrong_User'

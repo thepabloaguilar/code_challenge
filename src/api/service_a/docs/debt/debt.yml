@@ -1,0 +1,61 @@
+Retornará uma Divida espeficica
+----
+tags:
+  - Serviço A
+parameters:
+  - in: header
+    name: Token
+    type: string
+    required: true
+    description: Token fornecido pela rota de Login
+  - in: path
+    name: debt_id
+    type: integer
+    required: true
+    description: ID da Divida
+definitions:
+  Debt:
+    type: object
+    properties:
+      idCliente:
+        type: integer
+      idEmpresa:
+        type: integer
+      nomeEmpresa:
+        type: string
+      valor:
+        type: number
+        format: float
+      descricao:
+        type: string
+      dataPagamento:
+        type: string
+        format: date
+      dataVencimento:
+        type: string
+        format: date
+  Token_Invalido:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Token Invalido ou Expirado
+  Token_No_Header:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Token não especificado no header
+responses:
+  200:
+    description: Divida especificada na URL
+    schema:
+      $ref: '#/definitions/Debt'
+  401:
+    description: Token Invalido ou Expirado
+    schema:
+      $ref: '#/definitions/Token_Invalido'
+  403:
+    description: Token não especificado no Header
+    schema:
+      $ref: '#/definitions/Token_No_Header'

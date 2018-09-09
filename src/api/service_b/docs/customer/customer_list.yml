@@ -1,0 +1,44 @@
+Retornará uma lista de Clientes com seus respectivas bens
+----
+tags:
+  - Serviço B
+definitions:
+  CustomersListB:
+    type: object
+    properties:
+      customers:
+        type: array
+        items:
+          $ref: "#/definitions/CustomerResourceB"
+  CustomerResourceB:
+    type: object
+    properties:
+      cpf:
+        type: string
+      nome:
+        type: string
+      endereco:
+        type: string
+      fonteDeRenda:
+        type: string
+      bens:
+        type: array
+        items:
+          $ref: "#/definitions/Bens"
+  Bens:
+    type: object
+    properties:
+      tipo:
+        type: string
+      descricao:
+        type: string
+      avaliadoEm:
+        type: number
+        format: float
+      quitado:
+        type: boolean
+responses:
+  200:
+    description: Lista de Clientes com seus respectivos bens
+    schema:
+      $ref: '#/definitions/CustomersListB'

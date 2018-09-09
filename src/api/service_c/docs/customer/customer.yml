@@ -1,0 +1,50 @@
+Retornará um Clientes com a lista de suas respectivas movimentações financeiras
+----
+tags:
+  - Serviço C
+parameters:
+  - in: path
+    name: tax_id
+    type: string
+    required: true
+    description: CPF do Cliente
+definitions:
+  customer_C:
+    type: object
+    properties:
+      cpf:
+        type: string
+      nome:
+        type: string
+      ultimaConsulta:
+        type: string
+        format: datetime
+      ultimaCompraCC:
+        type: object
+        properties:
+          date:
+            type: string
+            format: datetime
+          valor:
+            type: number
+            format: float
+      movimentacaoFinanceira:
+        type: array
+        items:
+          $ref: "#/definitions/Movimentacao_Financeira"
+  Movimentacao_Financeira:
+    type: object
+    properties:
+      tipo:
+        type: string
+      valor:
+        type: number
+        format: float
+      dataPagamento:
+        type: string
+        format: datetime
+responses:
+  200:
+    description: Cliente com suas respectivas movimentações financeiras
+    schema:
+      $ref: '#/definitions/customer_C'

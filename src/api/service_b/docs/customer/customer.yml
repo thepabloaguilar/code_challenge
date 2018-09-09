@@ -1,0 +1,53 @@
+Retornará um Cliente com seus respectivos bens
+----
+tags:
+  - Serviço B
+parameters:
+  - in: path
+    name: tax_id
+    type: string
+    required: true
+    description: CPF do Cliente
+definitions:
+  CustomerResourceB:
+    type: object
+    properties:
+      cpf:
+        type: string
+      nome:
+        type: string
+      endereco:
+        type: string
+      fonteDeRenda:
+        type: string
+      bens:
+        type: array
+        items:
+          $ref: "#/definitions/Bens"
+  Bens:
+    type: object
+    properties:
+      tipo:
+        type: string
+      descricao:
+        type: string
+      avaliadoEm:
+        type: number
+        format: float
+      quitado:
+        type: boolean
+  User_Not_Found:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Cliente não encontrado
+responses:
+  200:
+    description: Usuario com seus respectivos bens
+    schema:
+      $ref: '#/definitions/CustomerResourceB'
+  404:
+    description: Cliente não encontrado
+    schema:
+      $ref: '#/definitions/User_Not_Found'
